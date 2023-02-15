@@ -1,0 +1,88 @@
+{
+    "name": "vue-app",
+    "version": "0.1.3",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "build-dev": "webpack",
+        "wb-stats": "webpack --json > webpack-stats.json"
+    },
+    "dependencies": {
+        "@ag-grid-community/client-side-row-model": "^28.1.1",
+        "@ag-grid-community/vue3": "^28.1.1",
+        "@riophae/vue-treeselect": "^0.4.0",
+        "@tailwindcss/postcss7-compat": "^2.0.2",
+        "@tinymce/tinymce-vue": "^3.0.1",
+        "autoprefixer": "^9.8.8",
+        "axios": "^0.23.0",
+        "chart.js": "^3.9.1",
+        "core-js": "^3.6.5",
+        "crypto-js": "^4.1.1",
+        "devextreme": "^21.1.5",
+        "devextreme-vue": "^21.1.5",
+        "html2canvas": "^1.4.1",
+        "html2pdf.js": "^0.10.1",
+        "laravel-echo": "^1.14.1",
+        "lodash": "^4.17.21",
+        "moment": "^2.29.1",
+        "postcss": "^7.0.39",
+        "pusher-js": "^7.4.0",
+        "sweetalert2": "^11.1.9",
+        "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
+        "vue": "^2.6.11",
+        "vue-input-tag": "^2.0.7",
+        "vue-multi-date-picker": "^1.5.0",
+        "vue-responsive-components": "^0.2.3",
+        "vue-router": "^3.2.0",
+        "vue-router-tab": "^1.2.7",
+        "vue-toast-notification": "^0.6.2",
+        "vue2-datepicker": "^3.10.2",
+        "vue2-perfect-scrollbar": "^1.5.2",
+        "vuex": "^3.4.0",
+        "webpack-visualizer-plugin": "^0.1.11"
+    },
+    "devDependencies": {
+        "@tailwindcss/aspect-ratio": "^0.3.0",
+        "@tailwindcss/line-clamp": "^0.2.2",
+        "@vue/cli-plugin-babel": "~4.5.0",
+        "@vue/cli-plugin-eslint": "~4.5.0",
+        "@vue/cli-plugin-router": "^4.5.13",
+        "@vue/cli-plugin-vuex": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^6.7.2",
+        "eslint-plugin-vue": "^6.2.2",
+        "vue-cli-plugin-tailwind": "^2.0.6",
+        "vue-template-compiler": "^2.6.11",
+        "vuedraggable": "^2.24.3",
+        "webpack": "^4.46.0",
+        "webpack-bundle-analyzer": "^4.7.0"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended"
+        ],
+        "parserOptions": {
+            "parser": "babel-eslint"
+        },
+        "rules": {
+            "no-unused-vars": "off",
+            "no-useless-escape": "off",
+            "no-empty": "off",
+            "no-undef": "off",
+            "vue/no-parsing-error": [2, { "x-invalid-end-tag": false }]
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
+}

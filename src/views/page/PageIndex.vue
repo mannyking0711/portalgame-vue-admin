@@ -1,0 +1,174 @@
+<template>
+    <page>
+        <page-head></page-head>
+
+        <page-body>
+            <data-grid
+                :data-source="pages"
+                :columns="columns"
+                :action-column-width="120"
+                :action-column-text="translate(translateKey + '.Label.Action')"
+            >
+                <div slot="actionSlot" slot-scope="list">
+                    <app-button
+                        v-if="can(permission + '.update')"
+                        @click="createModal(list.row.form)"
+                        :sm="true"
+                        :title="translate('button.Edit')"
+                        icon="icon-edit-2"
+                        property="primary"
+                    />
+                </div>
+            </data-grid>
+        </page-body>
+
+        <modal :id="modalId" size="lg">
+            <modal-head>
+                <modal-title>{{ currentPage.title }}</modal-title>
+            </modal-head>
+            <modal-body v-if="modelShow">
+                <form @submit.prevent="save">
+                    <grid>
+
+                        <form-group
+                            :label="translate(translateKey + '.Label.Photo')"
+                            name="photo_name"
+                        >
+                            <form-photo :photo="photo_url" imgHeight="250px" v-model="form.photo_name"/>
+                        </form-group>
+
+                        <form-group
+                            :label="translate(translateKey + '.Label.Name') + (appLanguages.length > 1 ? ' ('+lang.name+')' : '')"
+                            :name="'translates.'+lang.code+'.name'"
+                            v-for="(lang, index) in appLanguages"
+                            :key="index"
+                        >
+                            <form-text v-model="form.translates[lang.code].name"/>
+                        </form-group>
+
+                        <form-group
+                            :label="translate(translateKey + '.Label.Content') + (appLanguages.length > 1 ? ' ('+lang.name+')' : '')"
+                            :name="'translates.'+lang.code+'.content'"
+                            v-for="(lang, index) in appLanguages"
+                            :key="'content'+index"
+                        >
+                            <form-html-editor v-model="form.translates[lang.code].content"/>
+                        </form-group>
+
+                        <form-group
+                            :border="false"
+                            :label="translate('crm.Blog.Label.Photos')"
+                            name="photos"
+                        >
+                            <form-photos :col="3" path="page" :item-photos="photoItems" img-height="110px" v-model="form.photos"/>
+                        </form-group>
+
+                        <app-button class="justify-center" property="success" type="submit">
+                            {{ translate('button.Save') }}
+                        </app-button>
+                    </grid>
+                </form>
+            </modal-body>
+        </modal>
+    </page>
+</template>
+
+<script>
+/*
+ * Import Components
+ * */
+import {mapActions, mapState} from 'vuex';
+
+const modalId = 'createModal';
+const translateKey = 'crm.Page';
+
+export default {
+    name: "PageIndex",
+    data() {
+        return {
+            translateKey,
+            modalId,
+            modelShow: false,
+            photo_url: null,
+            columns: [
+                {
+                    caption: translateKey + '.Label.Name',
+                    dataField: 'name',
+                    show: true
+                },
+            ],
+            form: {}
+        }
+    },
+    computed: {
+        ...mapState('PageStore', ['pages']),
+        permission() {
+            return this.currentPage.permission;
+        }
+    },
+    methods: {
+        ...mapActions('PageStore', ['getPages', 'setPage', 'actionPage', 'deletePage']),
+        /*
+         * Form Create
+         * */
+        formCreate(item = {}) {
+            const form = {
+                id: item.id || null,
+                photo_name: null,
+                photos: item.photos && item.photos.length ? item.photos.map(i => i.name) : [],
+                translates: {}
+            }
+            this.appLanguages.filter(i => {
+                form.translates[i.code] = {
+                    name: item.translates && item.translates[i.code] ? item.translates[i.code].name : null,
+                    content: item.translates && item.translates[i.code] ? item.translates[i.code].content : null,
+                }
+            });
+            this.photo_url = item.photo || null;
+            this.form = form;
+            this.modelShow = true;
+        },
+        /*
+         * Create Modal
+         * */
+        createModal(item = {}) {
+            this.modal(this.modalId)
+            this.modelShow = false;
+            this.resetError();
+            this.formCreate(item);
+        },
+        /*
+         * Remove
+         * */
+        remove(id) {
+            this.alert().then(r => this.deletePage(id).then(r => this.getPages()))
+        },
+        /*
+         * Action
+         * */
+        action(item, type) {
+            let action = item.action[type] ? 0 : 1;
+            this.actionPage({id: item.id, type, action}).then(r => this.getPages())
+        },
+        /*
+         * Save
+         * */
+        save() {
+            this.setPage(this.form)
+            .then(r => {
+                if (r) {
+                    this.modal(this.modalId);
+                    this.getPages();
+                }
+            })
+        }
+    },
+    created() {
+        this.getPages();
+    }
+}
+</script>
+
+<style scoped>
+
+</style>
